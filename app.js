@@ -8,6 +8,16 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const config = require("config");
 
+//connect to mongodb using mongoose
+var uri = "mongodb://127.0.0.1:27017/hello_express";
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((error) => console.error(error.message));
+
 app.use(bodyParser.json()); // parse requests of content-type - application/json
 app.use(bodyParser.urlencoded({ extended: true })); // parse requests of content-type - application/x-www-form-urlencoded
 app.use(helmet());
