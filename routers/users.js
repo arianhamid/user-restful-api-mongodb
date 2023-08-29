@@ -63,6 +63,9 @@ router.put(
         .status(422)
         .json({ errors: errors.array(), message: "validation failed" });
     }
+    // check if ObjectId that was passed in is valid
+    if (!mongoose.Types.ObjectId.isValid(req.params.id))
+      return res.status(400).json({ data: null, message: "invalid id" });
     let user = await User.findByIdAndUpdate(
       req.params.id,
       {
@@ -84,6 +87,9 @@ router.put(
 
 // validate incoming requests
 router.delete("/:id", async (req, res) => {
+  // check if ObjectId that was passed in is valid
+  if (!mongoose.Types.ObjectId.isValid(req.params.id))
+    return res.status(400).json({ data: null, message: "invalid id" });
   const user = await User.findByIdAndRemove(req.params.id);
   if (!user) {
     return res.status(404).json({ data: null, message: "user not found" });
