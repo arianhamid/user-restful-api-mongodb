@@ -2,14 +2,18 @@ const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
+const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
-  //get users from Users document
+  //get all users from Users document
   const users = await User.find();
   res.json({ data: users, message: "ok" });
 });
 
 router.get("/:id", async (req, res) => {
+  // check if ObjectId that was passed in is valid
+  if (!mongoose.Types.ObjectId.isValid(req.params.id))
+    return res.status(400).json({ data: null, message: "invalid id" });
   const user = await User.findById(req.params.id);
   if (!user)
     return res.status(404).json({ data: null, message: "user not found" });
